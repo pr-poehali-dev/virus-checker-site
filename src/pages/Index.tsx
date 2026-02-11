@@ -8,6 +8,7 @@ export default function Index() {
   const [isDragging, setIsDragging] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
   const [scanning, setScanning] = useState(false);
+  const [showMessage, setShowMessage] = useState(false);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -32,8 +33,12 @@ export default function Index() {
   };
 
   const startScan = () => {
-    setScanning(true);
-    setTimeout(() => setScanning(false), 3000);
+    setShowMessage(true);
+    setTimeout(() => {
+      setShowMessage(false);
+      setScanning(true);
+      setTimeout(() => setScanning(false), 3000);
+    }, 2000);
   };
 
   return (
@@ -138,7 +143,13 @@ export default function Index() {
                   ))}
                 </div>
 
-                {scanning && (
+                {showMessage && (
+                  <div className="mt-6 p-6 bg-destructive/10 border border-destructive rounded-lg animate-fade-in">
+                    <p className="text-2xl font-bold text-destructive text-center">Хуй тебе</p>
+                  </div>
+                )}
+
+                {scanning && !showMessage && (
                   <div className="mt-6">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm font-medium">Сканирование...</span>
@@ -151,7 +162,7 @@ export default function Index() {
                   </div>
                 )}
 
-                {!scanning && (
+                {!scanning && !showMessage && (
                   <Button 
                     className="w-full bg-primary hover:bg-primary/90 glow-effect mt-6"
                     size="lg"
